@@ -1,4 +1,4 @@
-import User from "./classes/class.user"
+import {User} from "./classes/class.user"
 
 class UserBuilder{
    BaseUser=User;

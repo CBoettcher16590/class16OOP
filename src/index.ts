@@ -1,5 +1,5 @@
 import fs from 'fs';
-
+import {User} from'./classes/class.user'
 export default class LoggedInUser {
 
     private static instance: LoggedInUser
@@ -11,21 +11,24 @@ export default class LoggedInUser {
         return LoggedInUser.instance;
     }
 
-    public connection() {
+    public connection(users:User) {
         const path = `${__dirname}/users.json`;
 
-        fs.writeFile(path,'{}', function (err) {
-            if (err) {
-                return console.log(err);
-        }
+        fs.writeFile(path, JSON.stringify(users), 'utf8', (err)=> {
+            if (err) throw err;
         })
     }
 };
 
-const testing = new LoggedInUser();
-const user = testing.connection();
+const user = new User()
+user.id = 2;
+user.money = 200;
+user.name = "alshahoud"
+ 
+const trying = new LoggedInUser()
+const last = trying.connection(user)
+ console.log(user)
 
-console.log(user)
 
 
 
