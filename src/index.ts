@@ -14,9 +14,7 @@ export default class LoggedInUser {
     public connection(users:User) {
         const path = `${__dirname}/users.json`;
 
-        fs.writeFile(path, JSON.stringify(users), 'utf8', (err)=> {
-            if (err) throw err;
-        })
+        fs.appendFileSync(path, JSON.stringify([users], null, 2))
     }
 };
 
@@ -25,8 +23,12 @@ user.id = 2;
 user.money = 200;
 user.name = "alshahoud"
  
-const trying = new LoggedInUser()
-const last = trying.connection(user)
+// const user = new User()
+// user.id = 1;
+// user.money = 100;
+// user.name = "angham"
+const login = new LoggedInUser()
+const signin = login.connection(user)
  console.log(user)
 
 
