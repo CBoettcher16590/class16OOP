@@ -3,20 +3,24 @@ import fs from 'fs';
 // type Constructor = new (...args: any[]) => {};
 
 
-    const createdArticle = { isFree: true, isRestricted: false }
-    const data:string = JSON.stringify(createdArticle)
-    const path  = `.​/article.json`;
 
-    fs.writeFileSync(path, data, 'utf8');
-
-
-
-
-
-
+    // const createdArticle = { isFree: true, isRestricted: false }
+    // const data:string = JSON.stringify(createdArticle)
+    // const path  = `${​​__dirname}​/data/article.json`;
+    // console.log(​​__dirname);
+    // console.log(createdArticle);
+    // console.log(data);
+    // console.log(path);
+    // fs.writeFileSync(path, data, 'utf8');
 
 
-// //member only
+    fs.writeFileSync(`${​​__dirname}​/data/article.json`, 'Hello', 'utf8');
+
+
+
+
+
+
 // //member only paid
 // //member only free
 // //guest free
@@ -35,6 +39,7 @@ import fs from 'fs';
 
 // function paid<articleBase extends Constructor>(articlePlus: articleBase, costM: number, costG: number) {
 //     return class paidArticle extends articlePlus {
+//         isFree: boolean = false;
 //         moneyRequiredMember: number = costM;
 //         moneyRequiredGuest: number = costG;
 //     };
@@ -97,44 +102,6 @@ import fs from 'fs';
 //     }
 
 // }
-
-// //member only
-// //member only paid
-// //member only free
-// //guest free
-// //guest paid
-
-// //member + paid, member + free, member 
-// // guest + paid, guest + free
-
-
-
-// //guests+members+free
-// const freeArticleBuilder = new ArticleBuilder;
-// freeArticleBuilder.plusFree;
-// freeArticleBuilder.plusGuest;
-// //free for everyone
-
-// //guests+members+paid
-// const paidArticleBuilder = new ArticleBuilder;
-// paidArticleBuilder.plusGuest();
-// paidArticleBuilder.plusPaid(10, 10); //it becomes paid for both or free for both
-
-// //free+everyone
-// const freeEveryoneArticleBuilder = new ArticleBuilder;
-// freeEveryoneArticleBuilder.plusGuest();
-// freeEveryoneArticleBuilder.plusFree(); //it becomes paid for both or free for both
-
-// //member+paid
-// const paidMemberOnlyBuilder = new ArticleBuilder;
-// paidMemberOnlyBuilder.plusMember();
-// paidMemberOnlyBuilder.plusPaid(10, 10); //it becomes paid for both or free for both
-
-// //member+free
-// const freeMemberOnlyBuilder = new ArticleBuilder;
-// freeMemberOnlyBuilder.plusMember();
-// freeMemberOnlyBuilder.plusFree();
-
 
 
 

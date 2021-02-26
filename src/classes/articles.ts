@@ -2,6 +2,19 @@ import fs from 'fs';
 
 type Constructor = new (...args: any[]) => {};
 
+// type Constructor = new (...args: any[]) => {};
+
+
+
+    // const createdArticle = { isFree: true, isRestricted: false }
+    // const data:string = JSON.stringify(createdArticle)
+    // const path  = `.​/article.json`;
+
+    // fs.writeFileSync(path, data, 'utf8');
+
+
+
+
 
 
 
@@ -18,26 +31,27 @@ type Constructor = new (...args: any[]) => {};
 //could also be guest paid. member free...
 
 function member<articleBase extends Constructor>(articlePlus: articleBase) {
-    return class basedSubmarine extends articlePlus {
+    return class memberArticle extends articlePlus {
         isRestricted = true;
     };
 }
 
 function paid<articleBase extends Constructor>(articlePlus: articleBase, costM: number, costG: number) {
-    return class basedSubmarine extends articlePlus {
+    return class paidArticle extends articlePlus {
+        isFree: boolean = false;
         moneyRequiredMember: number = costM;
         moneyRequiredGuest: number = costG;
     };
 }
 
 function free<articleBase extends Constructor>(articlePlus: articleBase) {
-    return class basedSubmarine extends articlePlus {
+    return class freeArticle extends articlePlus {
         isFree: boolean = true;
     };
 }
 
 function guest<articleBase extends Constructor>(articlePlus: articleBase) {
-    return class basedSubmarine extends articlePlus {
+    return class guestArticle extends articlePlus {
         isRestricted = false;
     };
 }
@@ -59,14 +73,14 @@ class ArticleBuilder {
 
     get createArticle() {
         if (this.articleInstance == null) {
+            const createdArticle = new this.newArticle
+            console.log(createdArticle)
+            const data:string = JSON.stringify(createdArticle)
+            console.log(data)
+            const path  = `${​​__dirname}​/article.json`;
+            console.log(path);
 
-            // const data = new this.newArticle
-            // fs.writeFile('message.txt', `${data}`, 'utf8', (err)=> {
-            //     if(err) throw err;
-            // });
-
-
-            return new this.newArticle
+            fs.writeFileSync(path, data, 'utf8');
         }
         return this.articleInstance
     }
@@ -145,41 +159,41 @@ class articleDirector {
 
     freeArticle() {
         const builder = new this.articleDirection();
-        freeArticleBuilder.plusFree;
-        freeArticleBuilder.plusGuest;
+        builder.plusFree();
+        builder.plusGuest();
         //free for everyone
         return builder;
 
     }
 
-    paidArticle() {
-        const builder = new this.articleDirection();
-        paidArticleBuilder.plusGuest();
-        paidArticleBuilder.plusPaid(10, 10); //it becomes paid for both or free for both        
-        return builder;
+    // paidArticle() {
+    //     const builder = new this.articleDirection();
+    //     paidArticleBuilder.plusGuest();
+    //     paidArticleBuilder.plusPaid(10, 10); //it becomes paid for both or free for both        
+    //     return builder;
 
-    }
+    // }
 
     memberFreeArticle() {
         const builder = new this.articleDirection();
-        freeEveryoneArticleBuilder.plusGuest();
-        freeEveryoneArticleBuilder.plusFree(); //it becomes paid for both or free for both
+        builder.plusGuest();
+        builder.plusFree(); //it becomes paid for both or free for both
         return builder;
 
     }
 
     memberPaidArticle() {
         const builder = new this.articleDirection();
-
-
+        builder.plusMember();
+        builder.plusPaid(10,10);
         return builder;
 
     }
 
     guestPaidArticle() {
         const builder = new this.articleDirection();
-        freeMemberOnlyBuilder.plusMember();
-        freeMemberOnlyBuilder.plusFree();
+        builder.plusMember();
+        builder.plusPaid(10,10);
         return builder;
     }
 
@@ -189,10 +203,5 @@ class articleDirector {
 
 const freeArticles = new articleDirector(ArticleBuilder)
 const SuperArticle = freeArticles.freeArticle();
-console.log(SuperArticle);
+console.log(SuperArticle.createArticle);
 
-const Cats = freeArticles.freeArticle();
-const Dogs = freeArticles.freeArticle();
-const Rogues = freeArticles.freeArticle();
-const Logs = freeArticles.freeArticle();
-const Tongs = freeArticles.freeArticle();
