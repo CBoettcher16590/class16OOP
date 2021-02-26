@@ -7,6 +7,6 @@ const ElephantFacts = freeArticles.guestPaidArticle();
 const KnowYourNeighbor = freeArticles.memberFreeArticle();
 const ArticleNumber1 = freeArticles.memberPaidArticle();
 
-SuperArticle.createArticle()
+SuperArticle.createArticle("The Super Man's Article");
 // console.log(SuperArticle.createArticle());
 

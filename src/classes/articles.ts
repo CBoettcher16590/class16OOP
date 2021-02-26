@@ -1,19 +1,9 @@
 import fs from 'fs';
+import { stringify } from 'querystring';
 
 type Constructor = new (...args: any[]) => {};
-<<<<<<< HEAD
-=======
-//member only
-//member only paid
-//member only free
-//guest free
-//guest paid
->>>>>>> 48ba1b51ffafa546df0c1157a823fbde6c5f85da
 
-//member + paid, member + free, member 
-// guest + paid, guest + free
 
-//could also be guest paid. member free...
 
 function member<articleBase extends Constructor>(articlePlus: articleBase) {
     return class memberArticle extends articlePlus {
@@ -40,6 +30,12 @@ function guest<articleBase extends Constructor>(articlePlus: articleBase) {
     };
 }
 
+function naming<articleBase extends Constructor>(articlePlus: articleBase, name:string) {
+    return class namedArticle extends articlePlus {
+        name: string = name;
+    };
+}
+
 
 //--------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------
@@ -55,21 +51,22 @@ export class ArticleBuilder {
 
     newArticle = Article;
 
-    createArticle() {
+    name:string
 
+    createArticle(nom:string) {
+            
             const createdArticle = new this.newArticle
+            this.name = nom;
             console.log(createdArticle)
             const data:string = JSON.stringify(createdArticle)
             console.log(data)
             const dirName:string = __dirname;
-            const slicedDirName = dirName.slice(0,41);
-            const path  = `${slicedDirName}/data/article.json`;
+            const slicedDirName = dirName.slice(0,-7);
+            console.log(slicedDirName);
+            const path  = `${slicedDirName}/data/${nom}.json`;
           
 
-            fs.appendFileSync(path, `${data}`);
-
-            // fs.appendFileSync("data/article.json", data);
-            
+            fs.appendFileSync(path, `${data}`);            
       
     }
 
@@ -117,7 +114,8 @@ export class ArticleDirector {
 
     }
 
-    freeArticle() {
+//freeforall
+    freeArticle () {
         const builder = new this.articleDirection();
         builder.plusFree();
         builder.plusGuest();
@@ -126,14 +124,7 @@ export class ArticleDirector {
 
     }
 
-    // paidArticle() {
-    //     const builder = new this.articleDirection();
-    //     paidArticleBuilder.plusGuest();
-    //     paidArticleBuilder.plusPaid(10, 10); //it becomes paid for both or free for both        
-    //     return builder;
-
-    // }
-
+//free for members
     memberFreeArticle() {
         const builder = new this.articleDirection();
         builder.plusGuest();
@@ -142,6 +133,7 @@ export class ArticleDirector {
 
     }
 
+//paid for members    
     memberPaidArticle() {
         const builder = new this.articleDirection();
         builder.plusMember();
@@ -150,6 +142,7 @@ export class ArticleDirector {
 
     }
 
+//paid for all
     guestPaidArticle() {
         const builder = new this.articleDirection();
         builder.plusMember();
