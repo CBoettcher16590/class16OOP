@@ -1,16 +1,19 @@
 import fs from 'fs';
+import { stringify } from 'querystring';
 
 type Constructor = new (...args: any[]) => {};
-//member only
-//member only paid
-//member only free
-//guest free
-//guest paid
 
-//member + paid, member + free, member 
-// guest + paid, guest + free
 
-//could also be guest paid. member free...
+
+function fill<articleBase extends Constructor>(articlePlus: articleBase, name:string, content:string) {
+    return class memberArticle extends articlePlus {
+        name:string = name;
+        content:string = content;
+
+    };
+}
+
+
 
 function member<articleBase extends Constructor>(articlePlus: articleBase) {
     return class memberArticle extends articlePlus {
@@ -38,6 +41,7 @@ function guest<articleBase extends Constructor>(articlePlus: articleBase) {
 }
 
 
+
 //--------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------
 // Builder
@@ -52,22 +56,53 @@ export class ArticleBuilder {
 
     newArticle = Article;
 
-    createArticle() {
 
+    createArticle(nom:string) {
+       
+        const dirName:string = __dirname;
+        const slicedDirName = dirName.slice(0,-7);
+        const path  = `${slicedDirName}/data/${nom}.json`;
+        
+        const jsonExists = fs.existsSync(path)
+        
+//!jsonExists == checks inside of variable
+
+        if (jsonExists == true){
+
+            console.log("Woopsy doo, this file already exists 😂😂😂😂😂😂😂😂😂😂")
+            // const fileExist = fs.readFileSync(path)
+            // const nomus = nom + '1'
+            // console.log(nomus);
+            // const newPath = `${slicedDirName}/data/${nomus}.json`
+            // console.log(newPath);
+
+            // const createdArticle = new this.newArticle
+            // const data:string = JSON.stringify(createdArticle)
+          
+            // fs.appendFileSync(newPath, `${data}`);            
+
+        }
+
+        else{
+            console.log("Now for something completly different")
             const createdArticle = new this.newArticle
-            console.log(createdArticle)
             const data:string = JSON.stringify(createdArticle)
+
             console.log(data)
             const dirName:string = __dirname;
             const slicedDirName = dirName.slice(0,-7);
             const path  = `${slicedDirName}/data/article.json`;
           
 
-            fs.appendFileSync(path, `${data}`);
+            fs.appendFileSync(path, `${data}`);         
+        }
 
-            // fs.appendFileSync("data/article.json", data);
-            
-      
+
+              
+    }
+
+    fill(name:string, content:string) {
+        this.newArticle = fill(this.newArticle, name, content);
     }
 
     plusMember() {
@@ -114,8 +149,10 @@ export class ArticleDirector {
 
     }
 
-    freeArticle() {
+//freeforall
+    freeArticle (name:string, content:string) {
         const builder = new this.articleDirection();
+        builder.fill(name,content);
         builder.plusFree();
         builder.plusGuest();
         //free for everyone
@@ -123,32 +160,30 @@ export class ArticleDirector {
 
     }
 
-    // paidArticle() {
-    //     const builder = new this.articleDirection();
-    //     paidArticleBuilder.plusGuest();
-    //     paidArticleBuilder.plusPaid(10, 10); //it becomes paid for both or free for both        
-    //     return builder;
-
-    // }
-
-    memberFreeArticle() {
+//free for members
+    memberFreeArticle(name:string, content:string) {
         const builder = new this.articleDirection();
+        builder.fill(name,content);
         builder.plusGuest();
         builder.plusFree(); //it becomes paid for both or free for both
         return builder;
 
     }
 
-    memberPaidArticle() {
+//paid for members    
+    memberPaidArticle(name:string, content:string) {
         const builder = new this.articleDirection();
+        builder.fill(name,content);
         builder.plusMember();
         builder.plusPaid(10,10);
         return builder;
 
     }
 
-    guestPaidArticle() {
+//paid for all
+    guestPaidArticle(name:string, content:string) {
         const builder = new this.articleDirection();
+        builder.fill(name,content);
         builder.plusMember();
         builder.plusPaid(10,10);
         return builder;
