@@ -5,6 +5,16 @@ type Constructor = new (...args: any[]) => {};
 
 
 
+function fill<articleBase extends Constructor>(articlePlus: articleBase, name:string, content:string) {
+    return class memberArticle extends articlePlus {
+        name:string = name;
+        content:string = content;
+
+    };
+}
+
+
+
 function member<articleBase extends Constructor>(articlePlus: articleBase) {
     return class memberArticle extends articlePlus {
         isRestricted = true;
@@ -30,11 +40,6 @@ function guest<articleBase extends Constructor>(articlePlus: articleBase) {
     };
 }
 
-function naming<articleBase extends Constructor>(articlePlus: articleBase, name:string) {
-    return class namedArticle extends articlePlus {
-        name: string = name;
-    };
-}
 
 
 //--------------------------------------------------------------------------------------------------------------
@@ -65,9 +70,11 @@ export class ArticleBuilder {
             console.log(slicedDirName);
             const path  = `${slicedDirName}/data/${nom}.json`;
           
-
             fs.appendFileSync(path, `${data}`);            
-      
+    }
+
+    fill(name:string, content:string) {
+        this.newArticle = fill(this.newArticle, name, content);
     }
 
     plusMember() {
@@ -115,8 +122,9 @@ export class ArticleDirector {
     }
 
 //freeforall
-    freeArticle () {
+    freeArticle (name:string, content:string) {
         const builder = new this.articleDirection();
+        builder.fill(name,content);
         builder.plusFree();
         builder.plusGuest();
         //free for everyone
@@ -125,8 +133,9 @@ export class ArticleDirector {
     }
 
 //free for members
-    memberFreeArticle() {
+    memberFreeArticle(name:string, content:string) {
         const builder = new this.articleDirection();
+        builder.fill(name,content);
         builder.plusGuest();
         builder.plusFree(); //it becomes paid for both or free for both
         return builder;
@@ -134,8 +143,9 @@ export class ArticleDirector {
     }
 
 //paid for members    
-    memberPaidArticle() {
+    memberPaidArticle(name:string, content:string) {
         const builder = new this.articleDirection();
+        builder.fill(name,content);
         builder.plusMember();
         builder.plusPaid(10,10);
         return builder;
@@ -143,8 +153,9 @@ export class ArticleDirector {
     }
 
 //paid for all
-    guestPaidArticle() {
+    guestPaidArticle(name:string, content:string) {
         const builder = new this.articleDirection();
+        builder.fill(name,content);
         builder.plusMember();
         builder.plusPaid(10,10);
         return builder;
