@@ -27,7 +27,7 @@ function paid<articleBase extends Constructor>(articlePlus: articleBase, costM: 
 
 function free<articleBase extends Constructor>(articlePlus: articleBase) {
     return class freeArticle extends articlePlus {
-        isFree: boolean = true;
+        isFree = true;
     };
 }
 
@@ -44,7 +44,7 @@ function guest<articleBase extends Constructor>(articlePlus: articleBase) {
 //--------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------
 
-class Article { };
+class Article { }
 
 export class ArticleBuilder {
 
@@ -59,7 +59,7 @@ export class ArticleBuilder {
             const data:string = JSON.stringify(createdArticle)
             console.log(data)
             const dirName:string = __dirname;
-            const slicedDirName = dirName.slice(0,41);
+            const slicedDirName = dirName.slice(0,-7);
             const path  = `${slicedDirName}/data/article.json`;
           
 

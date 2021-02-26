@@ -1,5 +1,5 @@
  export default class User{
     name:string;
-    id:number;
+    id:any;
     money:number;
 }
