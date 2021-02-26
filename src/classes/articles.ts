@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-// type Constructor = new (...args: any[]) => {};
+type Constructor = new (...args: any[]) => {};
 
 
 
