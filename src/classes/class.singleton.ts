@@ -1,5 +1,5 @@
 import fs from 'fs';
-import {User} from'./classes/class.user'
+import User from './class.user';
 export default class LoggedInUser {
 
     private static instance: LoggedInUser
@@ -16,7 +16,7 @@ export default class LoggedInUser {
 
         fs.appendFileSync(path, JSON.stringify([users], null, 2))
     }
-};
+}
 
 const user = new User()
 user.id = 2;

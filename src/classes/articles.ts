@@ -1,11 +1,6 @@
 import fs from 'fs';
 
 type Constructor = new (...args: any[]) => {};
-
-
-
-
-
 //member only
 //member only paid
 //member only free
@@ -17,29 +12,27 @@ type Constructor = new (...args: any[]) => {};
 
 //could also be guest paid. member free...
 
-//========MixOns===========s
-
 function member<articleBase extends Constructor>(articlePlus: articleBase) {
-    return class basedSubmarine extends articlePlus {
+    return class memberArticle extends articlePlus {
         isRestricted = true;
     };
 }
 
 function paid<articleBase extends Constructor>(articlePlus: articleBase, costM: number, costG: number) {
-    return class basedSubmarine extends articlePlus {
+    return class paidArticle extends articlePlus {
         moneyRequiredMember: number = costM;
         moneyRequiredGuest: number = costG;
     };
 }
 
 function free<articleBase extends Constructor>(articlePlus: articleBase) {
-    return class basedSubmarine extends articlePlus {
+    return class freeArticle extends articlePlus {
         isFree: boolean = true;
     };
 }
 
 function guest<articleBase extends Constructor>(articlePlus: articleBase) {
-    return class basedSubmarine extends articlePlus {
+    return class guestArticle extends articlePlus {
         isRestricted = false;
     };
 }
@@ -53,24 +46,28 @@ function guest<articleBase extends Constructor>(articlePlus: articleBase) {
 
 class Article { };
 
-class ArticleBuilder {
+export class ArticleBuilder {
 
     articleInstance: ArticleBuilder | null
 
     newArticle = Article;
 
-    get createArticle() {
-        if (this.articleInstance == null) {
+    createArticle() {
 
-            // const data = new this.newArticle
-            // fs.writeFile('message.txt', `${data}`, 'utf8', (err)=> {
-            //     if(err) throw err;
-            // });
+            const createdArticle = new this.newArticle
+            console.log(createdArticle)
+            const data:string = JSON.stringify(createdArticle)
+            console.log(data)
+            const dirName:string = __dirname;
+            const slicedDirName = dirName.slice(0,41);
+            const path  = `${slicedDirName}/data/article.json`;
+          
 
+            fs.appendFileSync(path, `${data}`);
 
-            return new this.newArticle
-        }
-        return this.articleInstance
+            // fs.appendFileSync("data/article.json", data);
+            
+      
     }
 
     plusMember() {
@@ -101,34 +98,6 @@ class ArticleBuilder {
 
 
 
-//guests+members+free
-const freeArticleBuilder = new ArticleBuilder;
-freeArticleBuilder.plusFree;
-freeArticleBuilder.plusGuest;
-//free for everyone
-
-//guests+members+paid
-const paidArticleBuilder = new ArticleBuilder;
-paidArticleBuilder.plusGuest();
-paidArticleBuilder.plusPaid(10, 10); //it becomes paid for both or free for both
-
-//free+everyone
-const freeEveryoneArticleBuilder = new ArticleBuilder;
-freeEveryoneArticleBuilder.plusGuest();
-freeEveryoneArticleBuilder.plusFree(); //it becomes paid for both or free for both
-
-//member+paid
-const paidMemberOnlyBuilder = new ArticleBuilder;
-paidMemberOnlyBuilder.plusMember();
-paidMemberOnlyBuilder.plusPaid(10, 10); //it becomes paid for both or free for both
-
-//member+free
-const freeMemberOnlyBuilder = new ArticleBuilder;
-freeMemberOnlyBuilder.plusMember();
-freeMemberOnlyBuilder.plusFree();
-
-
-
 
 //--------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------------
@@ -137,7 +106,7 @@ freeMemberOnlyBuilder.plusFree();
 //--------------------------------------------------------------------------------------------------------------
 
 
-class articleDirector {
+export class ArticleDirector {
 
     // private _shipyard:submarineBuilder
 
@@ -147,54 +116,44 @@ class articleDirector {
 
     freeArticle() {
         const builder = new this.articleDirection();
-        freeArticleBuilder.plusFree;
-        freeArticleBuilder.plusGuest;
+        builder.plusFree();
+        builder.plusGuest();
         //free for everyone
         return builder;
 
     }
 
-    paidArticle() {
-        const builder = new this.articleDirection();
-        paidArticleBuilder.plusGuest();
-        paidArticleBuilder.plusPaid(10, 10); //it becomes paid for both or free for both        
-        return builder;
+    // paidArticle() {
+    //     const builder = new this.articleDirection();
+    //     paidArticleBuilder.plusGuest();
+    //     paidArticleBuilder.plusPaid(10, 10); //it becomes paid for both or free for both        
+    //     return builder;
 
-    }
+    // }
 
     memberFreeArticle() {
         const builder = new this.articleDirection();
-        freeEveryoneArticleBuilder.plusGuest();
-        freeEveryoneArticleBuilder.plusFree(); //it becomes paid for both or free for both
+        builder.plusGuest();
+        builder.plusFree(); //it becomes paid for both or free for both
         return builder;
 
     }
 
     memberPaidArticle() {
         const builder = new this.articleDirection();
-
-
+        builder.plusMember();
+        builder.plusPaid(10,10);
         return builder;
 
     }
 
     guestPaidArticle() {
         const builder = new this.articleDirection();
-        freeMemberOnlyBuilder.plusMember();
-        freeMemberOnlyBuilder.plusFree();
+        builder.plusMember();
+        builder.plusPaid(10,10);
         return builder;
     }
 
 }
 
 
-
-const freeArticles = new articleDirector(ArticleBuilder)
-const SuperArticle = freeArticles.freeArticle();
-console.log(SuperArticle);
-
-const Cats = freeArticles.freeArticle();
-const Dogs = freeArticles.freeArticle();
-const Rogues = freeArticles.freeArticle();
-const Logs = freeArticles.freeArticle();
-const Tongs = freeArticles.freeArticle();
