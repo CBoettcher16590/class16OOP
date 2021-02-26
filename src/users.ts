@@ -1,5 +1,5 @@
-import User from "./classes/class.user"
-
+import {User} from "./classes/class.user"
+//where we build the class for users
 class UserBuilder{
    BaseUser=User;
    private _instance:User;
@@ -11,4 +11,5 @@ class UserBuilder{
         return this._instance
     }
 }
+
 
