@@ -56,21 +56,41 @@ export class ArticleBuilder {
 
     newArticle = Article;
 
-    name:string
 
     createArticle(nom:string) {
-            
-            const createdArticle = new this.newArticle
-            this.name = nom;
-            console.log(createdArticle)
-            const data:string = JSON.stringify(createdArticle)
-            console.log(data)
-            const dirName:string = __dirname;
-            const slicedDirName = dirName.slice(0,-7);
-            console.log(slicedDirName);
-            const path  = `${slicedDirName}/data/${nom}.json`;
+       
+        const dirName:string = __dirname;
+        const slicedDirName = dirName.slice(0,-7);
+        const path  = `${slicedDirName}/data/${nom}.json`;
+        
+        const jsonExists = fs.existsSync(path)
+        
+//!jsonExists == checks inside of variable
+
+        if (jsonExists == true){
+
+            console.log("Woopsy doo, this file already exists 😂😂😂😂😂😂😂😂😂😂")
+            // const fileExist = fs.readFileSync(path)
+            // const nomus = nom + '1'
+            // console.log(nomus);
+            // const newPath = `${slicedDirName}/data/${nomus}.json`
+            // console.log(newPath);
+
+            // const createdArticle = new this.newArticle
+            // const data:string = JSON.stringify(createdArticle)
           
-            fs.appendFileSync(path, `${data}`);            
+            // fs.appendFileSync(newPath, `${data}`);            
+
+        }
+
+        else{
+            console.log("Now for something completly different")
+            const createdArticle = new this.newArticle
+            const data:string = JSON.stringify(createdArticle)
+            fs.appendFileSync(path, `${data}`);         
+        }
+
+              
     }
 
     fill(name:string, content:string) {
