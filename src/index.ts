@@ -1,31 +1,16 @@
-import fs from 'fs';
+import  {ArticleBuilder, ArticleDirector} from './classes/articles';
+import {userFactory} from "./class.userBuilder";
+const freeArticles = new ArticleDirector(ArticleBuilder)
+const SuperArticle = freeArticles.freeArticle();
 
-export default class LoggedInUser {
+const ElephantFacts = freeArticles.guestPaidArticle();
+const KnowYourNeighbor = freeArticles.memberFreeArticle();
+const ArticleNumber1 = freeArticles.memberPaidArticle();
 
-    private static instance: LoggedInUser
+// SuperArticle.createArticle()
+// // console.log(SuperArticle.createArticle());
+//
+// ``
 
-    constructor() {
-        if (LoggedInUser.instance = null) {
-            return new LoggedInUser();
-        }
-        return LoggedInUser.instance;
-    }
-
-    public connection() {
-        const path = `${__dirname}/users.json`;
-
-        fs.writeFile(path,'{}', function (err) {
-            if (err) {
-                return console.log(err);
-        }
-        })
-    }
-};
-
-const testing = new LoggedInUser();
-const user = testing.connection();
-
-console.log(user)
-
-
-
+const user1=userFactory("Danielle");
+console.log(user1)
